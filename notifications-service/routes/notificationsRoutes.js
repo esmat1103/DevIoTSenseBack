@@ -1,18 +1,20 @@
-// routes/notificationRoutes.js
 const express = require('express');
 const router = express.Router();
 const { sendNotification } = require('../websocket');
-const { getNotifications, getUnreadNotifications, markNotificationsAsRead, getSuperadminIds, handleAction,getNotificationStatus   } = require('../controllers/notificationController');
+const { getNotifications, getUnreadNotifications, markNotificationsAsRead, getSuperadminIds, handleAction, getNotificationStatus } = require('../controllers/notificationController');
 
 router.post('/notify', async (req, res) => {
   try {
-    const { role, userId, message, type, timestamp, title, read } = req.body;
+    const { role, userIds, message, type, timestamp, title, read } = req.body;
 
-    if (!userId || !message) {
-      return res.status(400).json({ error: 'userId and message must be provided.' });
+    if (!Array.isArray(userIds) || !userIds.length) {
+      return res.status(400).json({ error: 'userIds must be a non-empty array.' });
+    }
+    if (!message) {
+      return res.status(400).json({ error: 'Message must be provided.' });
     }
 
-    await sendNotification(role, userId, message, type, timestamp, title, read);
+    await sendNotification(role, userIds, message, type, timestamp, title, read);
 
     res.status(200).json({ success: true, message: 'Notification sent successfully.' });
   } catch (error) {
@@ -30,32 +32,37 @@ router.post('/notify/superadmins', async (req, res) => {
     }
 
     const superadminIds = await getSuperadminIds();
-    const notificationIds = [];
-
-    for (const userId of superadminIds) {
-      const ids = await sendNotification('superadmin', userId, message, type, timestamp, title, read);
-      notificationIds.push(...ids.notificationIds);  
+    if (!superadminIds.length) {
+      return res.status(404).json({ error: 'No superadmins found.' });
     }
 
-    res.status(200).json({ success: true, message: 'Notification sent to all superadmins successfully.', notificationIds }); 
+    const ids = await sendNotification('superadmin', superadminIds, message, type, timestamp, title, read);
+
+    res.status(200).json({ success: true, message: 'Notification sent to all superadmins successfully.', notificationIds: ids.notificationIds });
   } catch (error) {
     console.error('Error sending notification to superadmins:', error);
     res.status(500).json({ error: 'Error sending notification to superadmins.' });
   }
 });
 
-
 router.post('/notify/action', async (req, res) => {
   try {
-    const { role, userId, message, type, timestamp, title, read, actionRequired, actionDetails, actionStatus } = req.body;
+    const { role, userIds, message, type, timestamp, title, read, actionRequired, actionDetails, actionStatus } = req.body;
 
-    if (!userId || !message) {
-      return res.status(400).json({ error: 'userId and message must be provided.' });
+    if (!Array.isArray(userIds) || !userIds.length) {
+      return res.status(400).json({ error: 'userIds must be a non-empty array.' });
+    }
+    if (!message) {
+      return res.status(400).json({ error: 'Message must be provided.' });
     }
 
-    await sendNotification(role, userId, message, type, timestamp, title, read, actionRequired, actionDetails, actionStatus);
+    const ids= await sendNotification(role, userIds, message, type, timestamp, title, read, actionRequired, actionDetails, actionStatus);
 
-    res.status(200).json({ success: true, message: 'Action notification sent successfully.' });
+    res.status(200).json({
+      success: true,
+      message: 'Notification sent to all superadmins successfully.',
+      notificationIds: ids.notificationIds
+    });
   } catch (error) {
     console.error('Error sending action notification:', error);
     res.status(500).json({ error: 'Error sending action notification.' });
@@ -71,17 +78,31 @@ router.post('/notify/action/superadmins', async (req, res) => {
     }
 
     const superadminIds = await getSuperadminIds();
-    const notificationIds = [];
-
-    for (const userId of superadminIds) {
-      const ids = await sendNotification('superadmin', userId, message, type, timestamp, title, read, actionRequired, actionDetails, actionStatus);
-      notificationIds.push(...ids.notificationIds);  
+    if (!superadminIds.length) {
+      return res.status(404).json({ error: 'No superadmins found.' });
     }
 
-    res.status(200).json({ success: true, message: 'Notification sent to all superadmins successfully.', notificationIds }); 
+    const ids = await sendNotification(
+      'superadmin', 
+      superadminIds,
+      message, 
+      type, 
+      timestamp, 
+      title, 
+      read, 
+      actionRequired, 
+      actionDetails, 
+      actionStatus
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification sent to all superadmins successfully.',
+      notificationIds: ids.notificationIds
+    });
   } catch (error) {
-    console.error('Error sending notification to superadmins:', error);
-    res.status(500).json({ error: 'Error sending notification to superadmins.' });
+    console.error('Error sending action notification to superadmins:', error);
+    res.status(500).json({ error: 'Error sending action notification to superadmins.' });
   }
 });
 

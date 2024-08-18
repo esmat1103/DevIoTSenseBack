@@ -1,18 +1,15 @@
 const Sensor = require('../models/sensorsModel');
 
-// Broadcast function using Socket.IO
-function broadcast(io, event, data) {
-  io.emit(event, data);  // Emit an event to all connected clients
+function broadcast(io, data) {
+  io.emit('sensorUpdate', data); 
 }
 
-// Create a new sensor
 const createSensor = async (req, res) => {
   try {
     const sensor = new Sensor(req.body);
     await sensor.save();
 
-    // Broadcast to Socket.IO clients
-    broadcast(req.app.locals.io, 'sensorCreated', { message: 'Sensor created', sensor });
+    broadcast(req.app.locals.io, { message: 'Sensor created', sensor });
 
     res.status(201).json(sensor);
   } catch (error) {
@@ -20,7 +17,6 @@ const createSensor = async (req, res) => {
   }
 };
 
-// Get all sensors
 const getAllSensors = async (req, res) => {
   try {
     const sensors = await Sensor.find();
@@ -30,7 +26,6 @@ const getAllSensors = async (req, res) => {
   }
 };
 
-// Get a sensor by ID
 const getSensorById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -44,7 +39,6 @@ const getSensorById = async (req, res) => {
   }
 };
 
-// Update a sensor by ID
 const updateSensorById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -53,7 +47,7 @@ const updateSensorById = async (req, res) => {
       return res.status(404).json({ message: 'Sensor not found or already updated' });
     }
 
-    broadcast(req.app.locals.io, 'sensorUpdated', { message: 'Sensor updated', sensor: updatedSensor });
+    broadcast(req.app.locals.io, { message: 'Sensor updated', sensor: updatedSensor });
 
     res.status(200).json(updatedSensor);
   } catch (error) {
@@ -62,7 +56,6 @@ const updateSensorById = async (req, res) => {
   }
 };
 
-// Delete a sensor by ID
 const deleteSensorById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -71,7 +64,7 @@ const deleteSensorById = async (req, res) => {
       return res.status(404).json({ message: 'Sensor not found' });
     }
 
-    broadcast(req.app.locals.io, 'sensorDeleted', { message: 'Sensor deleted', sensorId: id });
+    broadcast(req.app.locals.io, { message: 'Sensor deleted', sensorId: id });
 
     res.status(200).json({ message: 'Sensor deleted successfully' });
   } catch (error) {
@@ -81,21 +74,31 @@ const deleteSensorById = async (req, res) => {
 
 const getSensorsByDevice = async (req, res) => {
   try {
-    const { deviceId } = req.params; // Use req.params to get the deviceId
-
-    if (!deviceId) {
-      return res.status(400).json({ message: 'Device ID is required' });
+    const { deviceId } = req.params;
+    const device = await Device.findById(deviceId).populate('sensors'); 
+    if (device) {
+      res.json({
+        deviceId: device._id,
+        sensors: device.sensors 
+      });
+    } else {
+      res.status(404).json({ message: 'Device not found' });
     }
-
-    if (typeof deviceId !== 'string') {
-      return res.status(400).json({ message: 'Invalid Device ID format' });
-    }
-
-    const sensors = await Sensor.find({ deviceID: deviceId });
-    res.status(200).json(sensors);
   } catch (error) {
-    console.error('Error fetching sensors by device:', error);
-    res.status(500).json({ message: 'Failed to fetch sensors' });
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+const getSensorBySensorID = async (req, res) => {
+  const { sensorID } = req.params;  
+  try {
+    const sensor = await Sensor.findOne({ sensorID });  
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor not found' });
+    }
+    res.status(200).json(sensor);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -106,5 +109,6 @@ module.exports = {
   getSensorById,
   updateSensorById,
   deleteSensorById,
-  getSensorsByDevice
+  getSensorsByDevice,
+  getSensorBySensorID
 };

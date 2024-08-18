@@ -3,16 +3,15 @@ const User = require('../models/User');
 
 exports.addNotification = async (req, res) => {
   try {
-    const { userId, role, message, type, timestamp, title, read} = req.body;
+    const { userIds, role, message, type, timestamp, title, read } = req.body;
     const notificationData = {
-      userId,
+      userId: userIds, // Changed to array
       role,
       message,
       type,
       timestamp,
       title,
       read,
-      
     };
 
     console.log('Notification Data to be saved:', notificationData);
@@ -66,7 +65,6 @@ exports.getSuperadminIds = async () => {
     throw error;
   }
 };
-
 
 exports.handleAction = async (req, res) => {
   try {

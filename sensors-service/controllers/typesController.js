@@ -1,10 +1,6 @@
 const SensorType = require('../models/typesModel');
 
 function broadcast(io, data) {
-  if (!io) {
-    console.error('Socket.IO instance is not available');
-    return;
-  }
   io.emit('sensorTypeUpdate', data); 
 }
 

@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { WebSocketServer } = require('ws');
+const complaintRoutes = require('./routes/complaintsRoutes'); 
 
 const unitRoutes = require('./routes/unitsRoutes');
 
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/units', unitRoutes);
+app.use('/complaints', complaintRoutes);
+
 
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
