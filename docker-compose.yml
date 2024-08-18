@@ -1,0 +1,84 @@
+services:
+  user-service:
+    build: ./userservice
+    container_name: userservice
+    ports:
+      - "3008:3008"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=3008
+      - UPLOAD_PATH=/uploads  
+    volumes:
+      - ./userservice/uploads:/usr/src/app/uploads
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "3389:3389"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=3389
+      - AUTHSERVICE_URL=http://auth-service:3389
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USER=esmateddinekhamassi@gmail.com
+      - EMAIL_PASS=eupsnghepyufrgjw
+
+  devices-service:
+    build: ./devices-service
+    container_name: devices-service
+    ports:
+      - "4002:4002"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=4002
+
+  parameters-service:
+    build: ./parameters-service
+    container_name: parameters-service
+    ports:
+      - "3004:3004"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=3004
+
+  sensors-service:
+    build: ./sensors-service
+    container_name: sensors-service
+    ports:
+      - "3001:3001"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=3001
+
+  notifications-service:
+    build: ./notifications-service
+    container_name: notifications-service
+    ports:
+      - "3010:3010"
+    networks:
+      - smartinnov
+    environment:
+      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - JWT_SECRET=SmartInnovation2024
+      - PORT=3010
+
+networks:
+  smartinnov:
+    driver: bridge
