@@ -24,7 +24,7 @@ module.exports.sendResetPasswordVerificationEmail = (email, resetToken) => {
           We have received a request to reset your password for your Smart Innovation account. If you initiated this request, please click the button below to reset your password.
         </p>
         <p style="text-align: center; margin: 20px 0;">
-          <a href="http://localhost:3001/ResetPasswordPage?token=${resetToken}" style="background-color: #5D69F3; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset My Password</a>
+          <a href="http://localhost:3000/ResetPasswordPage?token=${resetToken}" style="background-color: #5D69F3; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset My Password</a>
         </p>
         <p>
           If you did not request this password reset, please disregard this email. Your password will remain unchanged.

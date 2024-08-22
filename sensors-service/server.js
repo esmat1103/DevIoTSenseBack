@@ -29,7 +29,7 @@ mongoose.connect(MONGO_URL)
 app.use(cors());
 app.use(express.json());
 
-app.use('/', sensorsRoutes);
+app.use('/sensors', sensorsRoutes);
 app.use('/sensorTypes', sensorTypesRoutes);
 app.use('/sensorTopic', sensorTopicRoutes);
 app.use('/aqualabTopic', aqualabRoutes); 
