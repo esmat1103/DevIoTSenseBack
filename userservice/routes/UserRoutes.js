@@ -30,8 +30,8 @@ router.put('/email/:email/password', userController.updatePassword);
 
 router.delete('/:id', authenticateToken, authorize(['superadmin']), userController.deleteUser);
 router.get('/email/:email', userController.getUserByEmail);
-router.get('/role/admin', authenticateToken, authorize(['superadmin']), userController.getAllAdmins);
-router.get('/role/enduser', authenticateToken, authorize(['superadmin', 'admin']), userController.getAllEndUsers);
+router.get('/role/admin', authenticateToken, authorize(['superadmin','admin']), userController.getAllAdmins);
+router.get('/role/enduser', authenticateToken, authorize(['superadmin', 'admin','enduser']), userController.getAllEndUsers);
 router.post('/reset-password', userController.resetPassword);
 
 module.exports = router;
