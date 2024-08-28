@@ -7,7 +7,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=3008
       - UPLOAD_PATH=/uploads  
@@ -22,7 +22,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=3389
       - AUTHSERVICE_URL=http://auth-service:3389
@@ -39,7 +39,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=4002
 
@@ -51,7 +51,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=3004
 
@@ -63,7 +63,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=3001
 
@@ -75,7 +75,7 @@ services:
     networks:
       - smartinnov
     environment:
-      - MONGO_URL=mongodb://host.docker.internal:27017/smartinnov
+      - MONGO_URL=mongodb://162.19.25.155:27017/smartinnov
       - JWT_SECRET=SmartInnovation2024
       - PORT=3010
 
