@@ -10,7 +10,7 @@ const generateAuthToken = (userId, role) => {
   };
 
   const options = {
-    expiresIn: '1h' 
+    expiresIn: '7h' 
   };
 
   return jwt.sign(payload, jwtSecret, options);
