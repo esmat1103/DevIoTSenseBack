@@ -7,7 +7,7 @@ let io;
 const initWebSocket = (server) => {
   io = socketIo(server, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: 'http://162.19.25.155:3000',
       methods: ['GET', 'POST']
     }
   });
