@@ -14,7 +14,7 @@ const aqualabRoutes = require('./routes/aqualabTopicRoutes');
 const app = express();
 const port =  3001; 
 
-const MONGO_URL ="mongodb://host.docker.internal:27017/smartinnov" ;
+const MONGO_URL ="mongodb://162.19.25.155:27017/smartinnov" ;
 
 mongoose.connect(MONGO_URL)
   .then(() => {
