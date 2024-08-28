@@ -9,7 +9,6 @@ require('dotenv').config();
 const sensorsRoutes = require('./routes/sensorsRoutes');
 const sensorTypesRoutes = require('./routes/typesRoutes');
 const sensorTopicRoutes = require('./routes/sensorTopicRoutes');
-const aqualabRoutes = require('./routes/aqualabTopicRoutes');
 
 const app = express();
 const port =  3001; 
