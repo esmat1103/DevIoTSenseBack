@@ -1,10 +1,1 @@
 
-{
-    "remoteUri": "mongodb://162.19.25.155:27017/",
-    "localUri": "mongodb://host.docker.internal:27017/smartinnov",
-    "remoteDbName": "iotsesnse",
-    "remoteCollectionName": "sensors",
-    "localDbName": "smartinnov",
-    "localCollectionName": "sensortopics"
-  }
-  
