@@ -2,8 +2,8 @@ const axios = require('axios');
 const Complaint = require('../models/complaintsModel');
 const WebSocket = require('ws'); 
 
-const DEVICESERVICE_URL = 'http://localhost:4002';
-const SENSORSERVICE_URL = 'http://localhost:3001';
+const DEVICESERVICE_URL = 'http://162.19.25.155:4002';
+const SENSORSERVICE_URL = 'http://162.19.25.155:3001';
 
 
 function broadcast(wss, data) {
