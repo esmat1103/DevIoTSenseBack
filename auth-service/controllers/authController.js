@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
         subscription_status: user.subscription_status 
       },
       JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '7h' }
     );
 
     res.json({ token });
