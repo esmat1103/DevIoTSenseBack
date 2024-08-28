@@ -10,7 +10,6 @@ const sensorsRoutes = require('./routes/sensorsRoutes');
 const sensorTypesRoutes = require('./routes/typesRoutes');
 const sensorTopicRoutes = require('./routes/sensorTopicRoutes');
 const aqualabRoutes = require('./routes/aqualabTopicRoutes');
-const pollForChanges = require('./test'); 
 
 const app = express();
 const port =  3001; 
@@ -20,7 +19,6 @@ const MONGO_URL ="mongodb://host.docker.internal:27017/smartinnov" ;
 mongoose.connect(MONGO_URL)
   .then(() => {
     console.log('Connected to MongoDB');
-    pollForChanges()
     })
   .catch(err => {
     console.error('Failed to connect to MongoDB', err);
